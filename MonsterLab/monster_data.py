@@ -127,7 +127,7 @@ class Random:
 
     @staticmethod
     def bonus():
-        roll = front_linear(5)
+        roll = front_linear(6)
         return f"{f'+{roll}' if roll > 0 else f''}"
 
     @staticmethod
