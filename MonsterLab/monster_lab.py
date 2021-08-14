@@ -1,4 +1,6 @@
-import datetime
+from datetime import datetime
+
+import pytz
 
 from MonsterLab.monster_data import Random
 
@@ -11,7 +13,8 @@ class Monster:
         self.level = level or Random.random_level()
         self.rarity = rarity or Random.random_rank()
         self.damage = f"{self.level}d{Random.dice[self.rarity]}{Random.bonus()}"
-        self.time_stamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        lambda_time = pytz.timezone('US/Pacific')
+        self.time_stamp = datetime.now(lambda_time).strftime("%Y-%m-%d %H:%M:%S")
         self.health = Random.resource(self.level, self.rarity)
         self.energy = Random.resource(self.level, self.rarity)
         self.sanity = Random.resource(self.level, self.rarity)

@@ -1,1 +1,4 @@
-Fortuna
+Fortuna~=4.1.9
+MonsterLab~=1.0.5
+setuptools~=50.0.3
+pytz~=2021.1
