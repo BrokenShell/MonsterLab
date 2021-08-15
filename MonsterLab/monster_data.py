@@ -1,4 +1,4 @@
-from Fortuna import QuantumMonty, FlexCat, front_linear
+from Fortuna import QuantumMonty, FlexCat, front_linear, TruffleShuffle
 from Fortuna import canonical, percent_true, plus_or_minus
 
 
@@ -36,7 +36,7 @@ class Random:
         "Shadow",
     ]).middle_gauss
 
-    character = QuantumMonty([
+    character_type = QuantumMonty([
         "Mage",
         "Guard",
         "Villager",
@@ -44,11 +44,16 @@ class Random:
         "Knight",
     ]).middle_gauss
 
+    archfey_type = TruffleShuffle((
+        lambda: Random.dragon_type,
+        lambda: Random.element,
+    ))
+
     monsters_by_type = {
         "Fey": (
             lambda: f"{Random.dragon_type()} Faerie",
             lambda: f"{Random.element()} Spirit",
-            lambda: f"{Random.dragon_type() if percent_true(50) else Random.element()} Archfey",
+            lambda: f"{Random.archfey_type()} Archfey",
         ),
         "Demonic": (
             "Imp",
@@ -62,10 +67,10 @@ class Random:
             "Balor",
         ),
         "Devilkin": (
-            lambda: f"Goblin {Random.character()}",
-            lambda: f"Kobold {Random.character()}",
+            lambda: f"Goblin {Random.character_type()}",
+            lambda: f"Kobold {Random.character_type()}",
             lambda: f"{Random.element()} Devil",
-            lambda: f"{'Succubus' if percent_true(75) else 'Incubus'}"
+            lambda: f"{'Succubus' if percent_true(75) else 'Incubus'}",
             "Pit Lord",
             "Prince of Fear",
         ),
@@ -84,9 +89,9 @@ class Random:
             "Efreeti",
         ),
         "Undead": (
-            lambda: f"Zombie {Random.character()}",
-            lambda: f"Skeletal {Random.character()}",
-            lambda: f"Ghostly {Random.character()}",
+            lambda: f"Zombie {Random.character_type()}",
+            lambda: f"Skeletal {Random.character_type()}",
+            lambda: f"Ghostly {Random.character_type()}",
             "Ghoul",
             "Banshee",
             "Wraith",
