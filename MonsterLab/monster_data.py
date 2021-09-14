@@ -1,9 +1,41 @@
-from Fortuna import QuantumMonty, FlexCat, front_linear, TruffleShuffle
-from Fortuna import canonical, percent_true, plus_or_minus
+from collections import deque
+from math import sqrt
+from random import shuffle, triangular, choice, random, randrange, randint
+from typing import Iterable, Any
+
+
+class TruffleShuffle:
+    """ Truffle Shuffle
+    Please refer to https://pypi.org/project/Fortuna/ for full documentation.
+    """
+    __slots__ = ("flat", "data", "rotate_size", "size")
+
+    def __init__(self, collection: Iterable[Any]):
+        tmp_data = list(collection)
+        shuffle(tmp_data)
+        self.data = deque(tmp_data)
+        self.size = len(self.data)
+        self.rotate_size = int(sqrt(self.size))
+
+    def __call__(self) -> Any:
+        self.data.rotate(int(triangular(1, self.rotate_size, self.size)))
+        selection = self.data[-1]
+        if callable(selection):
+            return selection()
+        else:
+            return selection
+
+
+def plus_or_minus(num: int) -> int:
+    return randrange(-num, num+1)
+
+
+def percent_true(num: int = 50) -> bool:
+    return randint(1, 100) <= num
 
 
 class Random:
-    dragon_type = QuantumMonty([
+    dragon_type = TruffleShuffle([
         "Platinum",
         "Gold",
         "Silver",
@@ -21,9 +53,9 @@ class Random:
         "Ruby",
         "Diamond",
         "Prismatic",
-    ]).middle_gauss
+    ])
 
-    element = QuantumMonty([
+    element = TruffleShuffle([
         "Lightning",
         "Flame",
         "Spore",
@@ -34,19 +66,19 @@ class Random:
         "Smoke",
         "Magma",
         "Shadow",
-    ]).middle_gauss
+    ])
 
-    character_type = QuantumMonty([
+    character_type = TruffleShuffle([
         "Mage",
         "Guard",
         "Villager",
         "Archer",
         "Knight",
-    ]).middle_gauss
+    ])
 
     archfey_type = TruffleShuffle((
-        lambda: Random.dragon_type,
-        lambda: Random.element,
+        lambda: Random.dragon_type(),
+        lambda: Random.element(),
     ))
 
     monsters_by_type = {
@@ -121,24 +153,35 @@ class Random:
     dice = dict(zip(rank_options, dice_options))
     var_options = range(len(rank_options))
     variance = dict(zip(rank_options, var_options))
-    random_level = QuantumMonty(range(1, 21)).front_poisson
-    random_rank = QuantumMonty(dice.keys()).front_linear
-    random_name = FlexCat(
-        monsters_by_type,
-        key_bias="truffle_shuffle",
-        val_bias="front_linear",
-    )
-    random_type = random_name.random_cat
+    random_type = TruffleShuffle(monsters_by_type.keys())
 
     @staticmethod
     def bonus():
-        roll = front_linear(6)
+        roll = int(triangular(0, 6, 0))
         return f"{f'+{roll}' if roll > 0 else f''}"
 
     @staticmethod
     def resource(level, rank):
         return round(sum((
-            canonical() if percent_true(50) else -canonical(),
+            random() if percent_true(50) else -random(),
             plus_or_minus(Random.variance[rank]),
             level * Random.dice[rank],
         )), 2)
+
+    @staticmethod
+    def random_level():
+        return int(triangular(1, 21, 3))
+
+    def random_rank(self):
+        group = list(self.dice.keys())
+        return group[int(triangular(0, len(group), 0))]
+
+    def random_name(self, monster_type=None):
+        if monster_type:
+            monster = choice(self.monsters_by_type[monster_type])
+        else:
+            monster = choice(self.monsters_by_type[self.random_type()])
+        if callable(monster):
+            return monster()
+        else:
+            return monster

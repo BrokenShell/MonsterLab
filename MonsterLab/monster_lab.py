@@ -8,16 +8,17 @@ from MonsterLab.monster_data import Random
 class Monster:
 
     def __init__(self, name=None, monster_type=None, level=None, rarity=None):
-        self.type = monster_type or Random.random_type()
-        self.name = name or Random.random_name(self.type)
-        self.level = level or Random.random_level()
-        self.rarity = rarity or Random.random_rank()
-        self.damage = f"{self.level}d{Random.dice[self.rarity]}{Random.bonus()}"
+        rand = Random()
+        self.type = monster_type or rand.random_type()
+        self.name = name or rand.random_name(self.type)
+        self.level = level or rand.random_level()
+        self.rarity = rarity or rand.random_rank()
+        self.damage = f"{self.level}d{rand.dice[self.rarity]}{rand.bonus()}"
         lambda_time = pytz.timezone('US/Pacific')
         self.time_stamp = datetime.now(lambda_time).strftime("%Y-%m-%d %H:%M:%S")
-        self.health = Random.resource(self.level, self.rarity)
-        self.energy = Random.resource(self.level, self.rarity)
-        self.sanity = Random.resource(self.level, self.rarity)
+        self.health = rand.resource(self.level, self.rarity)
+        self.energy = rand.resource(self.level, self.rarity)
+        self.sanity = rand.resource(self.level, self.rarity)
 
     def to_dict(self):
         return {
