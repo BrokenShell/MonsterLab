@@ -1,4 +1,2 @@
-Fortuna~=4.2.0
-MonsterLab~=1.0.5
 setuptools~=50.0.3
 pytz~=2021.1
