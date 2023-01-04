@@ -1,2 +1,2 @@
-setuptools~=50.0.3
-pytz~=2021.1
+pytz
+twine
