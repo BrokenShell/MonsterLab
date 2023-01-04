@@ -14,7 +14,7 @@ class Monster:
         self.level = level or rand.random_level()
         self.rarity = rarity or rand.random_rank()
         self.damage = f"{self.level}d{rand.dice[self.rarity]}{rand.bonus()}"
-        self.time_stamp = datetime.now(
+        self.timestamp = datetime.now(
             pytz.timezone('US/Pacific')
         ).strftime("%Y-%m-%d %H:%M:%S")
         self.health = rand.resource(self.level, self.rarity)
@@ -31,7 +31,7 @@ class Monster:
             "Health": self.health,
             "Energy": self.energy,
             "Sanity": self.sanity,
-            "Time Stamp": self.time_stamp,
+            "Timestamp": self.timestamp,
         }
 
     def __repr__(self):
