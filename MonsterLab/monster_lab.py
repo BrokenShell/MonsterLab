@@ -35,8 +35,7 @@ class Monster:
         }
 
     def __repr__(self):
-        output = (f"{key}: {val}" for key, val in vars(self).items())
-        return "\n".join(output)
+        return "\n".join(f"{k}: {v}" for k, v in self.to_dict().items())
 
     def __str__(self):
         return repr(self) + "\n"
