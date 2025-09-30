@@ -1,2 +1,2 @@
-from .monster_lab import Monster
-from .monster_data import Random
+from .monsters import Monster
+from .monster_lab import MonsterLab
