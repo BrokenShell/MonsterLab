@@ -16,7 +16,7 @@ class Monster:
         self.damage = f"{self.level}d{rand.dice[self.rarity]}{rand.bonus()}"
         self.timestamp = datetime.now(
             pytz.timezone('US/Pacific')
-        ).strftime("%Y-%m-%d %H:%M:%S")
+        ).strftime('%Y-%m-%d %-I:%M:%S %p')
         self.health = rand.resource(self.level, self.rarity)
         self.energy = rand.resource(self.level, self.rarity)
         self.sanity = rand.resource(self.level, self.rarity)
